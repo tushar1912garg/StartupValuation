@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Startup Valuation Calculator</title>
+  </head>
+  <body>
+    <h1>Startup Valuation Calculator</h1>
+    <form action="javascript:void(0);" onsubmit="calculateValuation()">
+      <label for="revenue">Annual Revenue ($):</label>
+      <input type="number" id="revenue" required><br><br>
+      <label for="growthRate">Growth Rate:</label>
+      <input type="number" id="growthRate" step="0.01" required><br><br>
+      <label for="industryMultiplier">Industry Multiplier:</label>
+      <input type="number" id="industryMultiplier" required><br><br>
+      <label for="opportunityCost">Opportunity Cost ($):</label>
+      <input type="number" id="opportunityCost" required><br><br>
+      <label for="tam">Total Addressable Market (TAM):</label>
+      <input type="number" id="tam" required><br><br>
+      <label for="sam">Serviceable Addressable Market (SAM):</label>
+      <input type="number" id="sam" required><br><br>
+      <label for="som">Serviceable Obtainable Market (SOM):</label>
+      <input type="number" id="som" required><br><br>
+      <button type="submit">Calculate Valuation</button>
+    </form>
+    <div id="result"></div>
+
+    <script src="startup_valuation.js"></script>
+  </body>
+</html>
