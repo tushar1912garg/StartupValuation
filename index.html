@@ -1,164 +1,90 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Startup Valuation Calculator</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 30px;
-      }
+<head>
+  <title>Startup Valuation Calculator</title>
+</head>
+<body>
+  <h1>Startup Valuation Calculator</h1>
+  <form onsubmit="saveFormResponse(event)">
+    <label for="stage">Stage of the startup:</label>
+    <select id="stage" required>
+      <option value="idea">Idea</option>
+      <option value="prototype">Prototype</option>
+      <option value="revenue">Revenue</option>
+    </select>
 
-      h1 {
-        text-align: center;
-      }
+    <label for="revenue">Annual Revenue ($):</label>
+    <input type="number" id="revenue" step="0.01" required>
 
-      form {
-        max-width: 400px;
-        margin: 0 auto;
-      }
+    <label for="growthRate">Growth Rate:</label>
+    <input type="number" id="growthRate" step="0.01" required>
 
-      label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-      }
+    <label for="industryMultiplier">Industry Multiplier:</label>
+    <input type="number" id="industryMultiplier" required>
 
-      input[type="number"],
-      select {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-        font-size: 16px;
-      }
+    <label for="opportunityCost">Opportunity Cost ($):</label>
+    <input type="number" id="opportunityCost" required>
 
-      button[type="submit"] {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        background-color: #4CAF50;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-      }
+    <label for="tam">Total Addressable Market (TAM):</label>
+    <input type="number" id="tam" required>
 
-      #result {
-        margin-top: 20px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Startup Valuation Calculator</h1>
-    <form onsubmit="calculateValuation(event)">
-      <label for="stage">Stage of the startup:</label>
-      <select id="stage" required>
-        <option value="idea">Idea</option>
-        <option value="prototype">Prototype</option>
-        <option value="revenue">Revenue</option>
-      </select>
+    <label for="sam">Serviceable Addressable Market (SAM):</label>
+    <input type="number" id="sam" required>
 
-      <label for="revenue">Annual Revenue ($):</label>
-      <input type="number" id="revenue" step="0.01" required>
+    <label for="som">Serviceable Obtainable Market (SOM):</label>
+    <input type="number" id="som" required>
 
-      <label for="growthRate">Growth Rate:</label>
-      <input type="number" id="growthRate" step="0.01" required>
+    <button type="submit">Calculate Valuation</button>
+  </form>
 
-      <label for="industryMultiplier">Industry Multiplier:</label>
-      <input type="number" id="industryMultiplier" required>
+  <script>
+    function saveFormResponse(event) {
+      event.preventDefault();
 
-      <label for="opportunityCost">Opportunity Cost ($):</label>
-      <input type="number" id="opportunityCost" required>
+      const stage = document.getElementById("stage").value;
+      const revenue = parseFloat(document.getElementById("revenue").value);
+      const growthRate = parseFloat(document.getElementById("growthRate").value);
+      const industryMultiplier = parseFloat(document.getElementById("industryMultiplier").value);
+      const opportunityCost = parseFloat(document.getElementById("opportunityCost").value);
+      const tam = parseFloat(document.getElementById("tam").value);
+      const sam = parseFloat(document.getElementById("sam").value);
+      const som = parseFloat(document.getElementById("som").value);
 
-      <label for="tam">Total Addressable Market (TAM):</label>
-      <input type="number" id="tam" required>
-
-      <label for="sam">Serviceable Addressable Market (SAM):</label>
-      <input type="number" id="sam" required>
-
-      <label for="som">Serviceable Obtainable Market (SOM):</label>
-      <input type="number" id="som" required>
-
-      <button type="submit">Calculate Valuation</button>
-    </form>
-    <div id="result"></div>
-
-    <!-- Add the Firebase library -->
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js"></script>
-
-    <script>
-      // Your Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyBiwq8xI9O0eAHeFnYkTrv0Oy-NFLf-cGA",
-        authDomain: "startup-valuation.firebaseapp.com",
-        projectId: "startup-valuation",
-        storageBucket: "startup-valuation.appspot.com",
-        messagingSenderId: "1043613632534",
-        appId: "1:1043613632534:web:acf287f21de07dff814d37",
-        measurementId: "G-4D1QZPMQW9"
+      const formData = {
+        stage,
+        revenue,
+        growthRate,
+        industryMultiplier,
+        opportunityCost,
+        tam,
+        sam,
+        som
       };
 
+      fetch('https://script.google.com/macros/s/AKfycbyB6azjNZPZG2axSAKVf1SSPJ6ePnE8CAjGWYmSGrO8Houkn1oRUD3jNbqPwD4_dYSo/exec', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => {
+        // Handle the response if needed
+      })
+      .catch(error => {
+        // Handle the error if needed
+      });
 
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      const database = firebase.database();
-
-      function calculateValuation(event) {
-        event.preventDefault();
-
-        const stage = document.getElementById("stage").value;
-        const revenue = parseFloat(document.getElementById("revenue").value);
-        const growthRate = parseFloat(document.getElementById("growthRate").value);
-        const industryMultiplier = parseFloat(document.getElementById("industryMultiplier").value);
-        const opportunityCost = parseFloat(document.getElementById("opportunityCost").value);
-        const tam = parseFloat(document.getElementById("tam").value);
-        const sam = parseFloat(document.getElementById("sam").value);
-        const som = parseFloat(document.getElementById("som").value);
-
-        const valuation = revenue * (1 + growthRate) * industryMultiplier / opportunityCost;
-        const marketPenetration = som / sam * 100;
-
-        document.getElementById("result").innerHTML = `
-          <h3>Valuation: $${valuation.toFixed(2)}</h3>
-          <p>Market Penetration: ${marketPenetration.toFixed(2)}%</p>
-        `;
-
-        // Save the response to the database
-        const timestamp = new Date().toLocaleString();
-        const response = {
-          stage,
-          revenue,
-          growthRate,
-          industryMultiplier,
-          opportunityCost,
-          tam,
-          sam,
-          som,
-          valuation,
-          marketPenetration,
-          timestamp
-        };
-
-        const responsesRef = database.ref("responses");
-        responsesRef.push(response);
-
-        // Reset the form
-        document.getElementById("stage").value = "idea";
-        document.getElementById("revenue").value = "";
-        document.getElementById("growthRate").value = "";
-        document.getElementById("industryMultiplier").value = "";
-        document.getElementById("opportunityCost").value = "";
-        document.getElementById("tam").value = "";
-        document.getElementById("sam").value = "";
-        document.getElementById("som").value = "";
-      }
-    </script>
-  </body>
+      // Reset the form
+      document.getElementById("stage").value = "idea";
+      document.getElementById("revenue").value = "";
+      document.getElementById("growthRate").value = "";
+      document.getElementById("industryMultiplier").value = "";
+      document.getElementById("opportunityCost").value = "";
+      document.getElementById("tam").value = "";
+      document.getElementById("sam").value = "";
+      document.getElementById("som").value = "";
+    }
+  </script>
+</body>
 </html>
