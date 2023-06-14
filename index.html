@@ -2,6 +2,72 @@
 <html>
   <head>
     <title>Startup Valuation Calculator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 30px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input[type="number"],
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
+
+      button[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      #result {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      #recordedValues {
+        margin-top: 30px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+    </style>
   </head>
   <body>
     <h1>Startup Valuation Calculator</h1>
@@ -11,26 +77,38 @@
         <option value="idea">Idea</option>
         <option value="prototype">Prototype</option>
         <option value="revenue">Revenue</option>
-      </select><br><br>
+      </select>
+
       <label for="revenue">Annual Revenue ($):</label>
-      <input type="number" id="revenue" step="0.01" required><br><br>
+      <input type="number" id="revenue" step="0.01" required>
+
       <label for="growthRate">Growth Rate:</label>
-      <input type="number" id="growthRate" step="0.01" required><br><br>
+      <input type="number" id="growthRate" step="0.01" required>
+
       <label for="industryMultiplier">Industry Multiplier:</label>
-      <input type="number" id="industryMultiplier" required><br><br>
+      <input type="number" id="industryMultiplier" required>
+
       <label for="opportunityCost">Opportunity Cost ($):</label>
-      <input type="number" id="opportunityCost" required><br><br>
+      <input type="number" id="opportunityCost" required>
+
       <label for="tam">Total Addressable Market (TAM):</label>
-      <input type="number" id="tam" required><br><br>
+      <input type="number" id="tam" required>
+
       <label for="sam">Serviceable Addressable Market (SAM):</label>
-      <input type="number" id="sam" required><br><br>
+      <input type="number" id="sam" required>
+
       <label for="som">Serviceable Obtainable Market (SOM):</label>
-      <input type="number" id="som" required><br><br>
+      <input type="number" id="som" required>
+
       <button type="submit">Calculate Valuation</button>
     </form>
     <div id="result"></div>
 
+    <div id="recordedValues"></div>
+
     <script>
+      var recordedValues = [];
+
       function calculateValuation(event) {
         event.preventDefault();
         var stage = document.getElementById("stage").value;
@@ -45,7 +123,25 @@
         var valuation = calculate_startup_valuation(stage, revenue, growthRate, industryMultiplier, opportunityCost, tam, sam, som);
 
         if (valuation !== null) {
-          document.getElementById("result").innerText = "The startup valuation is $" + valuation;
+          document.getElementById("result").innerText = "The startup valuation is $" + valuation.toFixed(2);
+
+          // Record the values and timestamp
+          var timestamp = new Date().toLocaleString();
+          var recordedValue = {
+            stage: stage,
+            revenue: revenue,
+            growthRate: growthRate,
+            industryMultiplier: industryMultiplier,
+            opportunityCost: opportunityCost,
+            tam: tam,
+            sam: sam,
+            som: som,
+            valuation: valuation.toFixed(2),
+            timestamp: timestamp
+          };
+          recordedValues.push(recordedValue);
+
+          displayRecordedValues();
         } else {
           document.getElementById("result").innerText = "Invalid stage entered. Please choose 'idea', 'prototype', or 'revenue'.";
         }
@@ -62,6 +158,44 @@
         } else {
           return null;
         }
+      }
+
+      function displayRecordedValues() {
+        var recordedValuesContainer = document.getElementById("recordedValues");
+        recordedValuesContainer.innerHTML = "";
+
+        if (recordedValues.length === 0) {
+          return;
+        }
+
+        var table = document.createElement("table");
+        var tableHeader = document.createElement("thead");
+        var tableBody = document.createElement("tbody");
+
+        // Create table header
+        var headerRow = document.createElement("tr");
+        var headers = ["Stage", "Revenue ($)", "Growth Rate", "Industry Multiplier", "Opportunity Cost ($)", "TAM", "SAM", "SOM", "Valuation ($)", "Timestamp"];
+        headers.forEach(function(header) {
+          var th = document.createElement("th");
+          th.innerText = header;
+          headerRow.appendChild(th);
+        });
+        tableHeader.appendChild(headerRow);
+        table.appendChild(tableHeader);
+
+        // Create table body
+        recordedValues.forEach(function(value) {
+          var row = document.createElement("tr");
+          Object.values(value).forEach(function(val) {
+            var td = document.createElement("td");
+            td.innerText = val;
+            row.appendChild(td);
+          });
+          tableBody.appendChild(row);
+        });
+
+        table.appendChild(tableBody);
+        recordedValuesContainer.appendChild(table);
       }
     </script>
   </body>
