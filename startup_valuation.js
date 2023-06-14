@@ -17,6 +17,7 @@ function calculateValuation() {
 }
 
 function calculate_startup_valuation(revenue, growth_rate, industry_multiplier, opportunity_cost, tam, sam, som) {
+  var stage = 'revenue'; // Assuming stage is always 'revenue' for the web version
   if (stage === 'idea') {
     return tam * 0.05;
   } else if (stage === 'prototype') {
